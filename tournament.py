@@ -4,7 +4,7 @@
 #
 
 import psycopg2
-import itertools
+
 
 
 def connect():
@@ -36,14 +36,14 @@ def countPlayers():
     """Returns the number of players currently registered."""
     conn = connect()
     db_cursor= conn.cursor()
-    query = "SELECT COUNT(*) AS total FROM players"
+    query = "SELECT count(*) AS total FROM PLAYERS"
     db_cursor.execute(query)
     total = db_cursor.fetchone()
     conn.close()
     return total[0]
     
-
-
+    
+    
 def registerPlayer(name):
     """Adds a player to the tournament database.
   
@@ -74,6 +74,14 @@ def playerStandings():
         matches: the number of matches the player has played
     
     """
+    conn = connect()
+    db_cursor = conn.cursor()
+    query =  ("SELECT * FROM standings;")
+    db_cursor.execute(query)
+    matches = db_cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return matches
  
     
 
@@ -86,8 +94,9 @@ def reportMatch(winner, loser):
     """
     conn = connect()
     db_cursor = conn.cursor()
-    query = "INSERT INTO matches (winner, loser) VALUES (%s,%s)" (winner, loser)
-    db_cursor.execute(query)
+    query = ("INSERT INTO matches (match_id, winner, loser) \
+              VALUES (default, %s, %s);")
+    db_cursor.execute(query, (winner, loser,))
     conn.commit()
     conn.close()
  
@@ -107,6 +116,21 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-  
+    standings = playerStandings()
+    num = int(countPlayers())
+    pairings = []
+    if (num > 0):
+        for i in range(num):
+            if (i % 2 == 0):
+                id1 = standings[i][0]
+                name1 = standings[i][1]
+                id2 = standings[i+1][0]
+                name2 = standings[i+1][1]
+                pair = (id1, name1, id2, name2)
+                pairings.append(pair)
+    return pairings            
+        
+    
+    
 
 
