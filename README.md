@@ -23,5 +23,5 @@ Udacity Fullstack Nanodegree Project Tournament-Results
  http://discussions.udacity.com
  http://stackoverflow.com
  
- // Thanks to Abigail Mathews, Renee MacDonald, Trish.
+ // Thanks to Abigail Mathews, Renee MacDonald, Trish helped me out through out this project by clarifying my doubts.
  
